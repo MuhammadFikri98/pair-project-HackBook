@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+      <div class="container">
+        <h1>TEST</h1>
+        <form action="/register" method="post">
+
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Email address</label>
+    <input type="email"
+    name="email"
+    class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+   
+  <div class="mb-3">
+    <label for="exampleInputPassword1" 
+    class="form-label">Password</label>
+    <input type="password"
+    name="password"
+    class="form-control" id="exampleInputPassword1">
+  </div>
+
+  <div class="mb-3">
+    <label for="" class="form-label">Role</label>
+    <select class="form-select" 
+    name="role"
+    aria-label="Default select example">
+  <option selected disabled>Open this select menu</option>
+  <option value="Admin">Admin</option>
+  <option value="User">User</option>
+</select>
+    <!-- <input type="text" 
+    name="role"
+    class="form-control" id=""> -->
+  </div>
+ 
+  <button type="submit" class="btn btn-primary">Register</button>
+</form>
+    </div>
+
+    <%- include('_linkbs') %>
+  </body>
+</html>
