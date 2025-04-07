@@ -4,10 +4,14 @@ const UserController = require("../controllers/UserController");
 const express = require("express");
 const router = express.Router();
 
+//home
+router.get("/", Controller.home)
+//register
 router.get("/register", UserController.registerForm);
 router.post("/register", UserController.postRegister);
-
+//login
 router.get("/login", UserController.loginForm)
+router.post("/login", UserController.postLogin)
 
 // router.get("/incubators/add", Controller.showAddIncubator);
 // router.post("/incubators/add", Controller.addIncubator);
