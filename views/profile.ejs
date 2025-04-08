@@ -35,8 +35,9 @@
 
     <!-- --------------------------------- -->
     <div class="container py-5">
-      <h1>Halo, <%= user.email %></h1>
+      <h1>Halo, <%= getUsernameFromEmail(user.email) %>!!!</h1>
       <p>Role: <strong><%= user.role %></strong></p>
+      <p>Account Created on: <strong><%= user.getFormatedDate() %></strong></p>
 
         <% if (user.UserProfile && user.UserProfile.bio) { %>
         <p><strong>Bio:</strong> <%= user.UserProfile.bio %></p>
@@ -49,6 +50,11 @@
         <h4><%= user.UserProfile ? "Edit Bio" : "Tambah Bio" %></h4>
         <form action="/profile/<%= user.id %>/bio" method="post">
           <div class="mb-3">
+            <% if (error) { %> <% error = error.split(',') %> <% error.forEach(err =>
+      { %>
+
+      <p style="color: red"><%= err %></p>
+      <% }); %> <% } %>
             <textarea
               name="bio"
               rows="3"
@@ -58,7 +64,7 @@
 <%= user.UserProfile ? user.UserProfile.bio : "" %></textarea
             >
           </div>
-          <button type="submit" class="btn btn-primary">Simpan Bio</button>
+          <button type="submit" class="btn btn-primary">Save Bio</button>
         </form>
 
         <hr />
@@ -86,7 +92,7 @@
 
       </div>
 
-      <a href="/" class="btn btn-secondary">Kembali ke Beranda</a>
+    
     </div>
 
     <%- include('_linkbs') %>

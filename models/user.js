@@ -19,6 +19,13 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "UserId",
       });
     }
+
+    getFormatedDate() {
+      let d = this.createdAt.toLocaleDateString();
+      d = d.split(",");
+      const [dd, mm, yyyy] = d[0].split("/");
+      return `${yyyy}-${mm}-${dd}`;
+    }
   }
   User.init(
     {

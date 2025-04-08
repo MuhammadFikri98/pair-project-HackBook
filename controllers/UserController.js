@@ -1,4 +1,5 @@
 const { Post, User, Tag, UserProfile, Post_Tag } = require("../models");
+const { formatLike, getUsernameFromEmail } = require("../helpers/helper");
 const bcrypt = require("bcryptjs");
 const { Op } = require("sequelize");
 
@@ -60,11 +61,32 @@ class UserController {
 
   static async home(req, res) {
     try {
-      let { error, search } = req.query;
+      let { notif, search } = req.query;
 
       let post = await Post.findPost(search, Op);
 
-      res.render("home", { post, session: req.session, error });
+      // notification format
+      const notification = notif
+        ? `Post with title as ${notif} has been removed`
+        : null;
+
+      res.render("home", {
+        post,
+        session: req.session,
+        formatLike,
+        getUsernameFromEmail,
+        notification,
+      });
+    } catch (error) {
+      res.send(error);
+    }
+  }
+
+  static async getAddPost(req, res) {
+    try {
+      let { error } = req.query;
+
+      res.render("addPost", { error });
     } catch (error) {
       res.send(error);
     }
@@ -85,9 +107,9 @@ class UserController {
 
       res.redirect("/");
     } catch (error) {
-       if (error.name === "SequelizeValidationError") {
+      if (error.name === "SequelizeValidationError") {
         let msg = error.errors.map((el) => el.message);
-        res.redirect(`/?error=${msg}`);
+        res.redirect(`/post?error=${msg}`);
       } else {
         res.send(error);
       }
@@ -97,8 +119,10 @@ class UserController {
   static async deletePost(req, res) {
     try {
       const { id } = req.params;
+      const post = await Post.findByPk(id);
+
       await Post.destroy({ where: { id } });
-      res.redirect("/");
+      res.redirect(`/?notif=${post.title}`);
     } catch (err) {
       res.send(err);
     }
@@ -107,6 +131,7 @@ class UserController {
   static async profile(req, res) {
     try {
       // console.log(req.params);
+      let { error } = req.query;
       let { id } = req.params;
 
       let user = await User.findByPk(id, {
@@ -120,7 +145,7 @@ class UserController {
       });
       // console.log(user);
 
-      res.render("profile", { user });
+      res.render("profile", { user, error, getUsernameFromEmail });
     } catch (error) {
       res.send(error);
     }
@@ -128,8 +153,8 @@ class UserController {
 
   static async addBio(req, res) {
     try {
-      console.log(req.body);
-      console.log(req.params);
+      // console.log(req.body);
+      // console.log(req.params);
 
       const { id } = req.params;
       const { bio } = req.body;
@@ -146,8 +171,14 @@ class UserController {
       }
 
       res.redirect(`/profile/${id}`);
-    } catch (err) {
-      res.send(err);
+    } catch (error) {
+      const { id } = req.params;
+      if (error.name === "SequelizeValidationError") {
+        let msg = error.errors.map((el) => el.message);
+        res.redirect(`/profile/${id}?error=${msg}`);
+      } else {
+        res.send(error);
+      }
     }
   }
 
@@ -160,8 +191,8 @@ class UserController {
       await post.increment("like");
 
       res.redirect("/");
-    } catch (err) {
-      res.send(err);
+    } catch (error) {
+      res.send(error);
     }
   }
 }

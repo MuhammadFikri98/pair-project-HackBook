@@ -8,38 +8,22 @@
  
 <body class="bg-light">
       <%- include('_navbar') %>
-  <div class="container py-4">
+  
     <div class="container py-4">
-  <h2 class="mb-4">Add New Post!</h2>
-  <% if (error) { %> <% error = error.split(',') %> <% error.forEach(err =>
-      { %>
-
-      <p style="color: red"><%= err %></p>
-      <% }); %> <% } %>
-
-  <form action="/post" method="POST">
-    <div class="mb-3">
-      <label for="title" class="form-label">Judul</label>
-      <input type="text" name="title" id="title" class="form-control">
-    </div>
-    <div class="mb-3">
-      <label for="content" class="form-label">Konten</label>
-      <textarea name="content" id="content" rows="3" class="form-control"></textarea>
-    </div>
-    <div class="mb-3">
-      <label for="imgUrl" class="form-label">Gambar (URL)</label>
-      <input type="text" name="imgUrl" id="imgUrl" class="form-control">
-    </div>
-    <button type="submit" class="btn btn-primary">Posting</button>
-  </form>
+    
+      
+<a href="/post" class="btn btn-primary"><h2>Add New Post</h2></a>
 
   <hr class="my-5">
 
-
+   <% if (notification) { %>
+      <div style="color: red"><h5><%= notification %></h5></div>
+      <% } %>
 
     <% post.forEach(el => { %>
       <div class="card mb-4 shadow-sm">
         <div class="card-body">
+           <small class="text-muted">Posted by: <%= getUsernameFromEmail(el.User.email) %></small>
           <h5 class="card-title"><%= el.title %></h5>
           <p class="card-text"><%= el.content %></p>
           
@@ -59,7 +43,7 @@
 
 
           <div class="d-flex justify-content-between align-items-center border-top pt-2">
-            <span>👍 <%= el.like %> Likes</span>
+            <span>👍 <%= formatLike(el.like) %> </span>
             <div>
                 <form action="/post/<%= el.id %>/delete" method="POST" class="d-inline">
       <button class="btn btn-sm btn-danger">Delete</button>

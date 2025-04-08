@@ -21,11 +21,17 @@ module.exports = (sequelize, DataTypes) => {
     static async findPost(search, Op) {
       try {
         let option = {
-          include: {
-            model: sequelize.models.Post_Tag,
-            include: sequelize.models.Tag,
-          },
-          order: [["createdAt", "DESC"]]
+          include: [
+            {
+              model: sequelize.models.User,
+              attributes: ["email"],
+            },
+            {
+              model: sequelize.models.Post_Tag,
+              include: sequelize.models.Tag,
+            },
+          ],
+          order: [["createdAt", "DESC"]],
         };
 
         if (search) {
@@ -68,6 +74,15 @@ module.exports = (sequelize, DataTypes) => {
           },
           notEmpty: {
             msg: "Content is required",
+          },
+          isMin3Words(value) {
+            const wordCount = value
+              .trim()
+              .split(" ")
+              .filter((word) => word).length;
+            if (wordCount < 3) {
+              throw new Error("Content must have at least 3 words");
+            }
           },
         },
       },

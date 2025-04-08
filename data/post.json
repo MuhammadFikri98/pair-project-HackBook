@@ -1,26 +1,42 @@
 [
   {
     "id": 1,
-    "title": "Pengalaman Belajar Programming",
-    "content": "Hari ini saya belajar membuat API dengan Express.",
-    "imgUrl": "https://example.com/images/coding.jpg",
+    "title": "Fanny",
+    "content": "Salah satu karakter mematikan untuk jungler, mobilitas dan kemampuannya untuk menyerang lawan memang sangat mematikan",
+    "imgUrl": "https://www.blibli.com/friends-backend/wp-content/uploads/2024/03/B111518-1-Fanny-1536x806.jpg",
     "UserId": 1,
-    "like": 10
+    "like": 540
   },
   {
     "id": 2,
-    "title": "Tips Menggunakan Sequelize",
-    "content": "Berikut cara membuat model dan migrasi dengan Sequelize CLI.",
-    "imgUrl": "https://example.com/images/sequelize-guide.jpg",
+    "title": "Franco",
+    "content": "Hero ini memiliki kemampuan menarik musuh dengan kait yang dimilikinya",
+    "imgUrl": "https://www.blibli.com/friends-backend/wp-content/uploads/2024/03/B111518-6-Franco-1536x806.jpg",
     "UserId": 2,
-    "like": 5
+    "like": 230
   },
   {
     "id": 3,
-    "title": "Project Terbaru Saya",
-    "content": "Ini adalah project social media saya.",
-    "imgUrl": "https://media.suara.com/pictures/653x366/2023/12/29/25983-ilustrasi-lord-mobile-legends.webp",
-    "UserId": 1,
-    "like": 0
+    "title": "Nana",
+    "content": "Salah satu hero mage yang mempunyai pasif menjadi boneka, sehingga sangat sulit untuk di sentuh",
+    "imgUrl": "https://www.blibli.com/friends-backend/wp-content/uploads/2024/03/B111518-7-Nana-1536x806.jpg",
+    "UserId": 3,
+    "like": 140
+  },
+  {
+    "id": 4,
+    "title": "Roger",
+    "content": "Hero ini memiliki dua role yakni marksman dan fighter, damage yang diberikan sangat tinggi",
+    "imgUrl": "https://www.blibli.com/friends-backend/wp-content/uploads/2024/03/B111518-12-Roger-1536x806.jpg",
+    "UserId": 4,
+    "like": 380
+  },
+  {
+    "id": 5,
+    "title": "Chou",
+    "content": "Salah satu hero fighter terbaik karna memiliki kemampuan untuk membekukan pergerakan lawan",
+    "imgUrl": "https://www.blibli.com/friends-backend/wp-content/uploads/2024/03/B111518-10-Chou-1536x806.jpg",
+    "UserId": 5,
+    "like": 460
   }
 ]
