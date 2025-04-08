@@ -12,7 +12,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-     const data = require("../user.json").map((el) => {
+     const data = require("../data/user.json").map((el) => {
        delete el.id;
        el.createdAt = el.updatedAt = new Date();
        return el;

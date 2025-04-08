@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "bio": "Profil pertama",
+    "UserId": 1
+  },
+  {
+    "id": 2,
+    "bio": "Profil kedua",
+    "UserId": 2
+  }
+]

@@ -12,12 +12,12 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    const data = require("../data/post.json").map((el) => {
-       delete el.id;
-       el.createdAt = el.updatedAt = new Date();
-       return el;
-     });
-     await queryInterface.bulkInsert("Posts", data);
+    const data = require("../data/tag.json").map((el) => {
+      delete el.id;
+      el.createdAt = el.updatedAt = new Date();
+      return el;
+    });
+    await queryInterface.bulkInsert("Tags", data);
   },
 
   async down (queryInterface, Sequelize) {
@@ -27,6 +27,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-        await queryInterface.bulkDelete("Posts", null);
+          await queryInterface.bulkDelete("Tags", null);
   }
 };

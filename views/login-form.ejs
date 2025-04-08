@@ -6,12 +6,21 @@
     <title>Document</title>
   </head>
   <body>
+        <nav class="navbar bg-body-tertiary">
+  <div class="container-fluid">
+    <a href="/register" class="navbar-brand">REGISTER</a>
+ 
+  </div>
+</nav>
       <div class="container">
-        <a href="/register" class="btn btn-info">REGISTER</a>
-        <a href="/" class="btn btn-danger">HOME</a>
+   
+     
         <h1>LOGIN</h1>
         <form action="/login" method="post">
 
+          <% if (error) { %>
+           <p style="color: red;"><%= error %></p> 
+         <% } %>
   <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">Email address</label>
     <input type="email"

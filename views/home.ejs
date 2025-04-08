@@ -5,13 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
-  <body>
-    <div class="container">
-      <h1>HOME</h1>
+ 
 
-      <a href="/login" class="btn btn-primary">LOGIN</a>
-      <a href="/register" class="btn btn-info">REGISTER</a>
+ 
+
+
+<body class="bg-light">
+      <%- include('_navbar') %>
+  <div class="container py-4">
+    <div class="container py-4">
+  <h2 class="mb-4">Buat Postingan Baru</h2>
+  <form action="/post" method="POST">
+    <div class="mb-3">
+      <label for="title" class="form-label">Judul</label>
+      <input type="text" name="title" id="title" class="form-control" required>
     </div>
+    <div class="mb-3">
+      <label for="content" class="form-label">Konten</label>
+      <textarea name="content" id="content" rows="3" class="form-control" required></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="imgUrl" class="form-label">Gambar (URL)</label>
+      <input type="text" name="imgUrl" id="imgUrl" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Posting</button>
+  </form>
+
+  <hr class="my-5">
+
+
+
+    <% post.forEach(el => { %>
+      <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title"><%= el.title %></h5>
+          <p class="card-text"><%= el.content %></p>
+
+          <% if (el.imgUrl) { %>
+            <img src="<%= el.imgUrl %>" class="img-fluid rounded mb-3" alt="Post image">
+          <% } %>
+
+          <div class="d-flex justify-content-between align-items-center border-top pt-2">
+            <span>👍 <%= el.like %> Likes</span>
+            <div>
+              <button class="btn btn-sm btn-outline-primary me-2">Like</button>
+              <button class="btn btn-sm btn-outline-secondary">Comment</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+
+</body>
+</html>
+
     <%- include('_linkbs') %>
   </body>
 </html>

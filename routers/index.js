@@ -4,14 +4,52 @@ const UserController = require("../controllers/UserController");
 const express = require("express");
 const router = express.Router();
 
-//home
-router.get("/", Controller.home)
 //register
 router.get("/register", UserController.registerForm);
 router.post("/register", UserController.postRegister);
 //login
-router.get("/login", UserController.loginForm)
-router.post("/login", UserController.postLogin)
+router.get("/login", UserController.loginForm);
+router.post("/login", UserController.postLogin);
+
+// router.use((req, res, next) => {
+//   console.log(req.session);
+
+//   if (!req.session.userId) {
+//     const error = "Please login first";
+//     res.redirect(`/login?error=${error}`);
+//   } else {
+//     next();
+//   }
+// });
+function isLoggedIn(req, res, next) {
+  console.log(req.session);
+
+  if (!req.session.userId) {
+    const error = "Please login first";
+    res.redirect(`/login?error=${error}`);
+  } else {
+    next();
+  }
+}
+
+function isAdmin(req, res, next) {
+  console.log(req.session);
+
+  if (!req.session.userId || req.session.role !== "admin") {
+    const error = "You have no access";
+    res.redirect(`/login?error=${error}`);
+  } else {
+    next();
+  }
+}
+
+router.use(isLoggedIn);
+
+//logout
+router.get("/logout", UserController.getLogOut);
+
+//home
+router.get("/", Controller.home);
 
 // router.get("/incubators/add", Controller.showAddIncubator);
 // router.post("/incubators/add", Controller.addIncubator);
