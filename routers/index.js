@@ -1,35 +1,36 @@
-const Controller = require("../controllers/controller");
 const UserController = require("../controllers/UserController");
-
 const express = require("express");
 const router = express.Router();
+const { isLoggedIn, isAdmin } = require("../middlewares/auth");
 
+//register
 router.get("/register", UserController.registerForm);
 router.post("/register", UserController.postRegister);
+//login
+router.get("/login", UserController.loginForm);
+router.post("/login", UserController.postLogin);
 
-router.get("/login", UserController.loginForm)
+//session
+router.use(isLoggedIn);
 
-// router.get("/incubators/add", Controller.showAddIncubator);
-// router.post("/incubators/add", Controller.addIncubator);
+//logout
+router.get("/logout", UserController.getLogOut);
 
-// router.get("/incubators/:incubatorId", Controller.seeDetailById);
+//home & posting & deletepost & like
+router.get("/", UserController.home);
 
-// router.get("/incubators/:incubatorId/startUp/add", Controller.getStartUp);
-// router.post("/incubators/:incubatorId/startUp/add", Controller.addStartUp);
+router.get('/post', UserController.getAddPost)
+router.post("/post", UserController.addPost);
 
-// router.get(
-//   "/incubators/:incubatorId/startUp/:startUpId/edit",
-//   Controller.getEditStartUp
-// );
-// router.post(
-//   "/incubators/:incubatorId/startUp/:startUpId/edit",
-//   Controller.postEditStartUp
-// );
+router.post("/post/:id/delete", UserController.deletePost);
+router.post("/post/:id/like", UserController.addLike);
 
-// router.get(
-//   "/incubators/:incubatorId/startUp/:startUpId/delete",
-//   Controller.deleteStartUp
-// );
-// router.get("/startUp", Controller.startUp);
+
+
+//profile
+router.get("/profile/:id", UserController.profile);
+
+//bio profile
+router.post("/profile/:id/bio", UserController.addBio);
 
 module.exports = router;
