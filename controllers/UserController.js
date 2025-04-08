@@ -1,5 +1,6 @@
-const { User } = require("../models");
+const { Post, User, Tag, UserProfile, Post_Tag } = require("../models");
 const bcrypt = require("bcryptjs");
+const { Op } = require("sequelize");
 
 class UserController {
   static loginForm(req, res) {
@@ -55,6 +56,113 @@ class UserController {
         res.redirect("/login");
       }
     });
+  }
+
+  static async home(req, res) {
+    try {
+      let { error, search } = req.query;
+
+      let post = await Post.findPost(search, Op);
+
+      res.render("home", { post, session: req.session, error });
+    } catch (error) {
+      res.send(error);
+    }
+  }
+
+  static async addPost(req, res) {
+    try {
+      const { title, content, imgUrl } = req.body;
+      const UserId = req.session.userId;
+
+      await Post.create({
+        title,
+        content,
+        imgUrl,
+        like: 0,
+        UserId,
+      });
+
+      res.redirect("/");
+    } catch (error) {
+       if (error.name === "SequelizeValidationError") {
+        let msg = error.errors.map((el) => el.message);
+        res.redirect(`/?error=${msg}`);
+      } else {
+        res.send(error);
+      }
+    }
+  }
+
+  static async deletePost(req, res) {
+    try {
+      const { id } = req.params;
+      await Post.destroy({ where: { id } });
+      res.redirect("/");
+    } catch (err) {
+      res.send(err);
+    }
+  }
+
+  static async profile(req, res) {
+    try {
+      // console.log(req.params);
+      let { id } = req.params;
+
+      let user = await User.findByPk(id, {
+        include: [
+          UserProfile,
+          {
+            model: Post,
+            order: [["createdAt", "DESC"]],
+          },
+        ],
+      });
+      // console.log(user);
+
+      res.render("profile", { user });
+    } catch (error) {
+      res.send(error);
+    }
+  }
+
+  static async addBio(req, res) {
+    try {
+      console.log(req.body);
+      console.log(req.params);
+
+      const { id } = req.params;
+      const { bio } = req.body;
+
+      // apakah profil user sudah ada
+      const userProfile = await UserProfile.findOne({ where: { UserId: id } });
+
+      if (userProfile) {
+        // Update bio
+        await userProfile.update({ bio });
+      } else {
+        // Buat bio baru
+        await UserProfile.create({ bio, UserId: id });
+      }
+
+      res.redirect(`/profile/${id}`);
+    } catch (err) {
+      res.send(err);
+    }
+  }
+
+  static async addLike(req, res) {
+    try {
+      const { id } = req.params;
+
+      const post = await Post.findByPk(id);
+
+      await post.increment("like");
+
+      res.redirect("/");
+    } catch (err) {
+      res.send(err);
+    }
   }
 }
 

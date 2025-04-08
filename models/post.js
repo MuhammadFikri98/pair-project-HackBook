@@ -17,6 +17,33 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "PostId",
       });
     }
+
+    static async findPost(search, Op) {
+      try {
+        let option = {
+          include: {
+            model: sequelize.models.Post_Tag,
+            include: sequelize.models.Tag,
+          },
+          order: [["createdAt", "DESC"]]
+        };
+
+        if (search) {
+          option.where = {
+            [Op.or]: [
+              { title: { [Op.iLike]: `%${search}%` } },
+              { content: { [Op.iLike]: `%${search}%` } },
+            ],
+          };
+        }
+
+        let post = await Post.findAll(option);
+
+        return post;
+      } catch (error) {
+        throw error;
+      }
+    }
   }
   Post.init(
     {
