@@ -10,9 +10,12 @@
       <%- include('_navbar') %>
   
     <div class="container py-4">
-    
+
+      <div style="text-align: center;">
+        <h3>Post Here! <a href="/post" class="btn btn-primary"><h5>Add New Post</h5></a></h3>
+      </div>
       
-<a href="/post" class="btn btn-primary"><h2>Add New Post</h2></a>
+
 
   <hr class="my-5">
 
@@ -21,7 +24,7 @@
       <% } %>
 
     <% post.forEach(el => { %>
-      <div class="card mb-4 shadow-sm">
+      <div class="card mb-4 shadow-sm" id="post-<%= el.id %>">
         <div class="card-body">
            <small class="text-muted">Posted by: <%= getUsernameFromEmail(el.User.email) %></small>
           <h5 class="card-title"><%= el.title %></h5>
@@ -51,6 +54,10 @@
               <form action="/post/<%= el.id %>/like" method="post" class="d-inline">
   <button class="btn btn-sm btn-outline-primary me-2">Like</button>
 </form>
+
+
+<a href="/edit/<%= el.id %>" class="btn btn-sm btn-outline-danger me-2">Edit</a>
+
 
               <button class="btn btn-sm btn-outline-secondary">Comment</button>
             </div>

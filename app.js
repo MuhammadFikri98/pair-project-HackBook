@@ -20,5 +20,5 @@ app.use(
 app.use("/", require("./routers"));
 
 app.listen(port, () => {
-  console.log(`Pahala kamu dipangkatkan ${port}`);
+  console.log(`PAHALA KAMU DIPANGKATKAN ${port} TRILYUN ALAM SEMESTA JAGAD RAYA`);
 });

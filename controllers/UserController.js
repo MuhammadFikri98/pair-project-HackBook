@@ -67,7 +67,7 @@ class UserController {
 
       // notification format
       const notification = notif
-        ? `Post with title as ${notif} has been removed`
+        ? `Post with Title: ${notif} has been removed`
         : null;
 
       res.render("home", {
@@ -94,7 +94,8 @@ class UserController {
 
   static async addPost(req, res) {
     try {
-      const { title, content, imgUrl } = req.body;
+      const { title, content } = req.body;
+      const imgUrl = req.file ? req.file.path : ""; // Ambil path gambar dari file yang di-upload
       const UserId = req.session.userId;
 
       await Post.create({
@@ -110,6 +111,42 @@ class UserController {
       if (error.name === "SequelizeValidationError") {
         let msg = error.errors.map((el) => el.message);
         res.redirect(`/post?error=${msg}`);
+      } else {
+        res.send(error);
+      }
+    }
+  }
+
+  static async getEditPost(req, res) {
+    try {
+      // let { error } = req.query;
+      // console.log(req.params);
+      let { id } = req.params;
+
+      let post = await Post.findByPk(id);
+
+      res.render("editPost", { post });
+    } catch (error) {
+      res.send(error);
+    }
+  }
+
+  static async editPost(req, res) {
+    try {
+      let { id } = req.params;
+      // console.log(req.body);
+
+      const { title, content } = req.body;
+      const imgUrl = req.file ? req.file.path : ""; // Ambil path gambar dari file yang di-upload
+
+      await Post.update({ title, content, imgUrl }, { where: { id } });
+
+      res.redirect("/");
+    } catch (error) {
+      let { id } = req.params;
+      if (error.name === "SequelizeValidationError") {
+        let msg = error.errors.map((el) => el.message);
+        res.redirect(`/edit/${id}?error=${msg}`);
       } else {
         res.send(error);
       }
@@ -190,7 +227,7 @@ class UserController {
 
       await post.increment("like");
 
-      res.redirect("/");
+      res.redirect(`/#post-${id}`);
     } catch (error) {
       res.send(error);
     }

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+ 
+<body class="bg-light">
+
+    <a href="/" class="">Home</a>
+    <div class="container">
+
+
+  <h2 class="mb-4" style="text-align: center;">Edit Post!</h2>
+
+
+  <form action="/edit/<%= post.id %>" method="POST">
+    <div class="mb-3">
+      <label for="title" class="form-label">Judul</label>
+      <input type="text" name="title" id="title" class="form-control" value="<%= post.title %>">
+    </div>
+    <div class="mb-3">
+      <label for="content" class="form-label">Konten</label>
+      <textarea name="content" id="content" rows="3" class="form-control"><%= post.content %></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="imgUrl" class="form-label">Gambar (URL)</label>
+      <input type="text" value="<%= post.imgUrl %>" name="imgUrl" id="imgUrl" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Posting</button>
+  </form>
+    </div>
+
+
+
+ 
+
+</body>
+</html>
+
+    <%- include('_linkbs') %>
+  </body>
+</html>
