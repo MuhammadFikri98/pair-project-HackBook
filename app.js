@@ -12,13 +12,17 @@ app.use(
     saveUninitialized: false,
     cookie: {
       secure: false,
-      sameSite: true //untuk security dari csrf attack
+      sameSite: true, //untuk security dari csrf attack
     },
   })
 );
 
+app.use("/uploads", express.static("uploads"));
+
 app.use("/", require("./routers"));
 
 app.listen(port, () => {
-  console.log(`PAHALA KAMU DIPANGKATKAN ${port} TRILYUN ALAM SEMESTA JAGAD RAYA`);
+  console.log(
+    `PAHALA KAMU DIPANGKATKAN ${port} TRILYUN ALAM SEMESTA JAGAD RAYA`
+  );
 });

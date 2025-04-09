@@ -95,7 +95,8 @@ class UserController {
   static async addPost(req, res) {
     try {
       const { title, content } = req.body;
-      const imgUrl = req.file ? req.file.path : ""; // Ambil path gambar dari file yang di-upload
+      const imgUrl = req.file ? `uploads/${req.file.filename}` : "";
+      // Ambil path gambar dari file yang di-upload
       const UserId = req.session.userId;
 
       await Post.create({
@@ -181,6 +182,20 @@ class UserController {
         ],
       });
       // console.log(user);
+      // FIX PATH GAMBAR
+      if (user.Posts && user.Posts.length > 0) {
+        user.Posts = user.Posts.map((post) => {
+          // Tambahkan '/' di depan imgUrl kalau belum ada
+          if (
+            post.imgUrl &&
+            !post.imgUrl.startsWith("/") &&
+            !post.imgUrl.startsWith("http")
+          ) {
+            post.imgUrl = `/${post.imgUrl}`;
+          }
+          return post;
+        });
+      }
 
       res.render("profile", { user, error, getUsernameFromEmail });
     } catch (error) {

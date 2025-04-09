@@ -34,13 +34,13 @@ router.get("/logout", UserController.getLogOut);
 router.get("/", UserController.home);
 
 router.get("/post", UserController.getAddPost);
-router.post("/post", UserController.addPost);
+router.post("/post", upload.single("imgUrl"), UserController.addPost);
 
 router.post("/post/:id/delete", UserController.deletePost);
 router.post("/post/:id/like", UserController.addLike);
 
 router.get("/edit/:id", UserController.getEditPost);
-router.post("/edit/:id", UserController.editPost);
+router.post("/edit/:id", upload.single("imgUrl"), UserController.editPost);
 
 //profile
 router.get("/profile/:id", UserController.profile);

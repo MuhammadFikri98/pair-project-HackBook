@@ -15,7 +15,7 @@
   <h2 class="mb-4" style="text-align: center;">Edit Post!</h2>
 
 
-  <form action="/edit/<%= post.id %>" method="POST">
+  <form action="/edit/<%= post.id %>" method="POST" enctype="multipart/form-data">
     <div class="mb-3">
       <label for="title" class="form-label">Judul</label>
       <input type="text" name="title" id="title" class="form-control" value="<%= post.title %>">
@@ -25,8 +25,11 @@
       <textarea name="content" id="content" rows="3" class="form-control"><%= post.content %></textarea>
     </div>
     <div class="mb-3">
-      <label for="imgUrl" class="form-label">Gambar (URL)</label>
-      <input type="text" value="<%= post.imgUrl %>" name="imgUrl" id="imgUrl" class="form-control">
+      <label for="imgUrl" class="form-label">Upload Gambar</label>
+      <input type="file" name="imgUrl" id="imgUrl" class="form-control">
+       <% if (post.imgUrl) { %>
+      <p>Gambar saat ini: <img src="/<%= post.imgUrl %>" width="100" /></p>
+    <% } %>
     </div>
     <button type="submit" class="btn btn-primary">Posting</button>
   </form>
