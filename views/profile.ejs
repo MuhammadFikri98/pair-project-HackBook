@@ -4,40 +4,18 @@
     <meta charset="UTF-8" />
     <title>Profil User</title>
   </head>
+  
   <body class="bg-light">
-
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/"><h1>Home</h1></a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-    
-        <li class="nav-item">
-          <a class="nav-link" href="/logout">Log Out</a>
-        </li>
-
-      
-      </ul>
-    </div>
-  </div>
-</nav>
+    <%- include('_navbarProfile') %>
 
     <!-- --------------------------------- -->
     <div class="container py-5">
-      <h1>Halo, <%= getUsernameFromEmail(user.email) %>!!!</h1>
+      <div style="text-align: center;">
+        <h1>Halo, <%= getUsernameFromEmail(user.email) %>!!!</h1>
       <p>Role: <strong><%= user.role %></strong></p>
       <p>Account Created on: <strong><%= user.getFormatedDate() %></strong></p>
+      </div>
+      
 
         <% if (user.UserProfile && user.UserProfile.bio) { %>
         <p><strong>Bio:</strong> <%= user.UserProfile.bio %></p>
@@ -82,6 +60,7 @@
         <% } %>
 
         <small class="text-muted">👍 <%= post.like %> Likes</small>
+      
       </div>
     </div>
   <% }) %>

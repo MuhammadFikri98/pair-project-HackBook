@@ -3,49 +3,136 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Register</title>
+  </head>
+  <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #f0f2f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        background-image: url("https://img.freepik.com/free-vector/dark-black-background-design-with-stripes_1017-38064.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      .facebook-container {
+        max-width: 400px;
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 21px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1),
+          0 8px 16px rgba(0, 0, 0, 0.1);
+      }
+      .facebook-logo {
+        color: #f67f00;
+        font-size: 3rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+      .facebook-title {
+        font-size: 1.2rem;
+        text-align: center;
+        margin-bottom: 20px;
+        color: #1c1e21;
+      }
+      .form-control {
+        padding: 15px;
+        height: 45px;
+        margin-bottom: 15px;
+      }
+      .form-label {
+        font-weight: 500;
+      }
+      .btn-facebook {
+        background-color: #42b72a;
+        color: white;
+        font-weight: bold;
+        padding: 10px;
+        width: 100%;
+        border: none;
+      }
+      .btn-facebook:hover {
+        background-color: #36a420;
+      }
+      .nav-link {
+        color: #f67f00;
+        font-weight: 500;
+      }
+      .error-message {
+        color: red;
+        font-size: 14px;
+        text-align: center;
+        margin-bottom: 15px;
+      }
+        .register-link {
+        margin-top: 10px;
+        font-size: 0.95rem;
+      }
+      .register-link a {
+        color: #1877f2;
+        font-weight: bold;
+        text-decoration: none;
+      }
+    </style>
   </head>
   <body>
-     <nav class="navbar bg-body-tertiary">
-  <div class="container-fluid">
-    <a href="/login" class="navbar-brand">LOGIN</a>
- 
-  </div>
-</nav>
-      <div class="container">
-      
-        <h1>REGISTER</h1>
-        <form action="/register" method="post">
+    <div class="facebook-container">
+      <div class="facebook-logo">HackBook</div>
+      <div class="facebook-title">Create a new account</div>
 
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Email address</label>
-    <input type="email"
-    name="email"
-    class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-   
-  <div class="mb-3">
-    <label for="exampleInputPassword1" 
-    class="form-label">Password</label>
-    <input type="password"
-    name="password"
-    class="form-control" id="exampleInputPassword1">
-  </div>
+      <% if (error) { %>
+        <p class="error-message"><%= error %></p>
+      <% } %>
 
-  <div class="mb-3">
-    <label for="" class="form-label">Role</label>
-    <select class="form-select" 
-    name="role"
-    aria-label="Default select example">
-  <option selected disabled>Open this select menu</option>
-  <option value="admin">Admin</option>
-  <option value="user">User</option>
-</select>
- 
-  </div>
- 
-  <button type="submit" class="btn btn-primary">Register</button>
-</form>
+      <form action="/register" method="post">
+        <div class="mb-3">
+          <input
+            type="email"
+            name="email"
+            class="form-control"
+            placeholder="Email address"
+           
+          />
+        </div>
+
+        <div class="mb-3">
+          <input
+            type="password"
+            name="password"
+            class="form-control"
+            placeholder="Password"
+         
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="" class="form-label">Role</label>
+          <select
+            class="form-select"
+            name="role"
+            aria-label="Default select example"
+           
+          >
+            <option selected disabled>Open this select menu</option>
+            <option value="admin">Admin</option>
+            <option value="user">User</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+      </form>
+
+      <div class="text-center mt-3">
+        <p class="register-link">Already have an account? <a href="/login" >Log in</a></p>
+       
+      </div>
     </div>
+
 
     <%- include('_linkbs') %>
   </body>

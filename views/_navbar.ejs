@@ -1,6 +1,9 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/"><h1>Home</h1></a>
+    <a class="navbar-brand" href="/"
+      ><h1 style="color: #f67f00">HackBook</h1></a
+    >
+
     <button
       class="navbar-toggler"
       type="button"
@@ -12,28 +15,36 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
+
+    <div
+      class="collapse navbar-collapse justify-content-between"
+      id="navbarNav"
+    >
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href=/profile/<%= session.userId %>
-            >Profile</a
+          <a
+            class="nav-link active"
+            aria-current="page"
+            href="/profile/<%= session.userId %>"
           >
+            Profile
+          </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/logout">Log Out</a>
         </li>
-
-        <form action="/" method="get" class="d-flex" role="search">
-          <input
-            class="form-control me-2"
-            type="search"
-            name="search"
-            placeholder="Search"
-            aria-label="Search"
-          />
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
       </ul>
+
+      <form action="/" method="get" class="d-flex" role="search">
+        <input
+          class="form-control me-2"
+          type="search"
+          name="search"
+          placeholder="Search"
+          aria-label="Search"
+        />
+        <button class="btn btn-outline-warning" type="submit">Search</button>
+      </form>
     </div>
   </div>
 </nav>

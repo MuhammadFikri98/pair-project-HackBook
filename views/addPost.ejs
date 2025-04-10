@@ -19,7 +19,7 @@
       <p style="color: red"><%= err %></p>
       <% }); %> <% } %>
 
-  <form action="/post" method="POST">
+  <form action="/post" method="POST" enctype="multipart/form-data">
     <div class="mb-3">
       <label for="title" class="form-label">Judul</label>
       <input type="text" name="title" id="title" class="form-control">
@@ -28,10 +28,27 @@
       <label for="content" class="form-label">Konten</label>
       <textarea name="content" id="content" rows="3" class="form-control"></textarea>
     </div>
+
     <div class="mb-3">
-      <label for="imgUrl" class="form-label">Gambar (URL)</label>
-      <input type="text" name="imgUrl" id="imgUrl" class="form-control">
+      <label for="imgUrl" class="form-label">Upload Gambar</label>
+      <input type="file" name="imgUrl" id="imgUrl" class="form-control">
     </div>
+
+<div class="mb-3">
+  <label for="tags" class="form-label">Tags</label>
+  <select class="form-select" name="tags[]" id="tags" multiple>
+      <option selected disabled>Open this select menu</option>
+    <% tags.forEach(tag => { %>
+      <option value="<%= tag.id %>"><%= tag.name %></option>
+    <% }) %>
+  </select>
+</div>
+
+   
+
+
+
+
     <button type="submit" class="btn btn-primary">Posting</button>
   </form>
     </div>

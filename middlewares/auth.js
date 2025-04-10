@@ -12,7 +12,7 @@ function isLoggedIn(req, res, next) {
 function isAdmin(req, res, next) {
   console.log(req.session);
 
-  if (!req.session.userId || req.session.role !== "admin") {
+  if (req.session.userId && req.session.role !== "admin") {
     const error = "You have no access";
     res.redirect(`/login?error=${error}`);
   } else {

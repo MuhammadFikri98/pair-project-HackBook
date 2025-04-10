@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+ 
+<body class="bg-light">
+
+    <a href="/" class="">Home</a>
+    <div class="container">
+
+
+  <h2 class="mb-4" style="text-align: center;">Edit Post!</h2>
+
+
+  <form action="/post/edit/<%= post.id %>" method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="title" class="form-label">Judul</label>
+      <input type="text" name="title" id="title" class="form-control" value="<%= post.title %>">
+    </div>
+    <div class="mb-3">
+      <label for="content" class="form-label">Konten</label>
+      <textarea name="content" id="content" rows="3" class="form-control"><%= post.content %></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="imgUrl" class="form-label">Upload Gambar</label>
+      <input type="file" name="imgUrl" id="imgUrl" class="form-control">
+       <% if (post.imgUrl) { %>
+      <p>Gambar saat ini: <img src="/<%= post.imgUrl %>" width="100" /></p>
+    <% } %>
+    </div>
+
+    <div class="mb-3">
+  <label for="tags" class="form-label">Tags</label>
+  <select class="form-select" name="tags[]" id="tags" multiple>
+    <% tags.forEach(tag => { %>
+      <option 
+        value="<%= tag.id %>" 
+        <%= post.Post_Tags.some(pt => pt.TagId === tag.id) ? "selected" : "" %>>
+        <%= tag.name %>
+      </option>
+    <% }) %>
+  </select>
+</div>
+
+
+    <button type="submit" class="btn btn-primary">Posting</button>
+  </form>
+    </div>
+
+
+
+ 
+
+</body>
+</html>
+
+    <%- include('_linkbs') %>
+  </body>
+</html>

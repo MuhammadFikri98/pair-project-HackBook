@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const { isLoggedIn, isAdmin } = require("../middlewares/auth");
 
+
 //register
 router.get("/register", UserController.registerForm);
 router.post("/register", UserController.postRegister);
@@ -16,21 +17,14 @@ router.use(isLoggedIn);
 //logout
 router.get("/logout", UserController.getLogOut);
 
-//home & posting & deletepost & like
+//home
 router.get("/", UserController.home);
 
-router.get('/post', UserController.getAddPost)
-router.post("/post", UserController.addPost);
-
-router.post("/post/:id/delete", UserController.deletePost);
-router.post("/post/:id/like", UserController.addLike);
-
-
+//post
+router.use("/post", require("./post"));
 
 //profile
-router.get("/profile/:id", UserController.profile);
+router.use("/profile", require("./profile"));
 
-//bio profile
-router.post("/profile/:id/bio", UserController.addBio);
 
 module.exports = router;

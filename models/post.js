@@ -124,6 +124,15 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
+      hooks: {
+        beforeCreate(post) {
+          // Buat setiap kata di title huruf awalnya jadi kapital
+          post.title = post.title
+            .split(" ")
+            .map((word) => word[0].toUpperCase() + word.slice(1))
+            .join(" ");
+        },
+      },
       sequelize,
       modelName: "Post",
     }

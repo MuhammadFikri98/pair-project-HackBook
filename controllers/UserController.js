@@ -11,17 +11,31 @@ class UserController {
   }
 
   static registerForm(req, res) {
-    res.render("register-form");
+    const { error } = req.query;
+
+    res.render("register-form", { error });
   }
   static postRegister(req, res) {
     // console.log(req.body);
     const { email, password, role } = req.body;
 
+    if (!email || !password || !role) {
+      const error = "All fields are required!";
+      return res.redirect(`/register?error=${error}`);
+    }
+
     User.create({ email, password, role })
       .then((newUser) => {
         res.redirect("/login");
       })
-      .catch((err) => res.send(err));
+      .catch((err) => {
+        if (err.name === "SequelizeValidationError") {
+          const errorMsg = err.errors.map((e) => e.message).join(", ");
+          res.redirect(`/register?error=${errorMsg}`);
+        } else {
+          res.send(err);
+        }
+      });
   }
 
   static postLogin(req, res) {
@@ -67,7 +81,7 @@ class UserController {
 
       // notification format
       const notification = notif
-        ? `Post with title as ${notif} has been removed`
+        ? `Post with Title: ${notif} has been removed`
         : null;
 
       res.render("home", {
@@ -85,8 +99,9 @@ class UserController {
   static async getAddPost(req, res) {
     try {
       let { error } = req.query;
+      const tags = await Tag.findAll();
 
-      res.render("addPost", { error });
+      res.render("addPost", { error, tags });
     } catch (error) {
       res.send(error);
     }
@@ -94,16 +109,27 @@ class UserController {
 
   static async addPost(req, res) {
     try {
-      const { title, content, imgUrl } = req.body;
+      const { title, content, tags } = req.body;
+      const imgUrl = req.file ? `uploads/${req.file.filename}` : "";
+      // Ambil path gambar dari file yang di-upload
       const UserId = req.session.userId;
 
-      await Post.create({
+      const newPost = await Post.create({
         title,
         content,
         imgUrl,
         like: 0,
         UserId,
       });
+
+      if (tags) {
+        const tagIds = Array.isArray(tags) ? tags : [tags]; // support single/multiple
+        const postTags = tagIds.map((tagId) => ({
+          PostId: newPost.id,
+          TagId: +tagId,
+        }));
+        await Post_Tag.bulkCreate(postTags);
+      }
 
       res.redirect("/");
     } catch (error) {
@@ -116,10 +142,75 @@ class UserController {
     }
   }
 
+  static async getEditPost(req, res) {
+    try {
+      // let { error } = req.query;
+      // console.log(req.params);
+      let { id } = req.params;
+
+      let post = await Post.findByPk(id, {
+        include: { model: Post_Tag, include: Tag },
+      });
+
+      const tags = await Tag.findAll();
+
+      res.render("editPost", { post, tags });
+    } catch (error) {
+      res.send(error);
+    }
+  }
+
+  static async editPost(req, res) {
+    try {
+      let { id } = req.params;
+      const { title, content, tags } = req.body;
+
+      const post = await Post.findByPk(id);
+
+      // Cek hak akses
+      if (req.session.role !== "admin" && req.session.userId !== post.UserId) {
+        const error = "You have no access to edit this post";
+        return res.redirect(`/?error=${error}`);
+      }
+
+      let updateData = { title, content };
+      if (req.file) {
+        updateData.imgUrl = `uploads/${req.file.filename}`;
+      }
+
+      await Post.update(updateData, { where: { id } });
+
+      // Hapus relasi lama
+      await Post_Tag.destroy({ where: { PostId: id } });
+
+      // Tambah relasi baru
+      if (tags) {
+        const tagIds = Array.isArray(tags) ? tags : [tags];
+        const postTags = tagIds.map((tagId) => ({
+          PostId: +id,
+          TagId: +tagId,
+        }));
+        await Post_Tag.bulkCreate(postTags);
+      }
+
+      res.redirect("/");
+    } catch (error) {
+      let { id } = req.params;
+      if (error.name === "SequelizeValidationError") {
+        let msg = error.errors.map((el) => el.message);
+        res.redirect(`/post//edit/${id}?error=${msg}`);
+      } else {
+        res.send(error);
+      }
+    }
+  }
+
   static async deletePost(req, res) {
     try {
       const { id } = req.params;
       const post = await Post.findByPk(id);
+
+      await Post_Tag.destroy({ where: { PostId: id } });
 
       await Post.destroy({ where: { id } });
       res.redirect(`/?notif=${post.title}`);
@@ -144,6 +235,20 @@ class UserController {
         ],
       });
       // console.log(user);
+      // FIX PATH GAMBAR
+      if (user.Posts && user.Posts.length > 0) {
+        user.Posts = user.Posts.map((post) => {
+          // Tambahkan '/' di depan imgUrl kalau belum ada
+          if (
+            post.imgUrl &&
+            !post.imgUrl.startsWith("/") &&
+            !post.imgUrl.startsWith("http")
+          ) {
+            post.imgUrl = `/${post.imgUrl}`;
+          }
+          return post;
+        });
+      }
 
       res.render("profile", { user, error, getUsernameFromEmail });
     } catch (error) {
@@ -190,7 +295,7 @@ class UserController {
 
       await post.increment("like");
 
-      res.redirect("/");
+      res.redirect(`/#post-${id}`);
     } catch (error) {
       res.send(error);
     }
