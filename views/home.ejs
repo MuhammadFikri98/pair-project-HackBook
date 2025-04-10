@@ -19,7 +19,7 @@
       
 
 
-  <hr class="my-5">
+  <hr class="my-4">
 
    <% if (notification) { %>
       <div style="color: red"><h5><%= notification %></h5></div>
@@ -58,7 +58,7 @@
         <button class="btn btn-sm btn-danger">Delete</button>
       </form>
 
-      <a href="/edit/<%= el.id %>" class="btn btn-sm btn-outline-danger me-2">Edit</a>
+      <a href="/post/edit/<%= el.id %>" class="btn btn-sm btn-outline-danger me-2">Edit</a>
     <% } %>
     
               <form action="/post/<%= el.id %>/like" method="post" class="d-inline">

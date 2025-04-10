@@ -198,7 +198,7 @@ class UserController {
       let { id } = req.params;
       if (error.name === "SequelizeValidationError") {
         let msg = error.errors.map((el) => el.message);
-        res.redirect(`/edit/${id}?error=${msg}`);
+        res.redirect(`/post//edit/${id}?error=${msg}`);
       } else {
         res.send(error);
       }
