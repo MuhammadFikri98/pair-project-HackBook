@@ -34,6 +34,21 @@
       <input type="file" name="imgUrl" id="imgUrl" class="form-control">
     </div>
 
+<div class="mb-3">
+  <label for="tags" class="form-label">Tags</label>
+  <select class="form-select" name="tags[]" id="tags" multiple>
+      <option selected disabled>Open this select menu</option>
+    <% tags.forEach(tag => { %>
+      <option value="<%= tag.id %>"><%= tag.name %></option>
+    <% }) %>
+  </select>
+</div>
+
+   
+
+
+
+
     <button type="submit" class="btn btn-primary">Posting</button>
   </form>
     </div>

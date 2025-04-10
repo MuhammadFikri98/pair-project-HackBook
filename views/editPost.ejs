@@ -24,6 +24,7 @@
       <label for="content" class="form-label">Konten</label>
       <textarea name="content" id="content" rows="3" class="form-control"><%= post.content %></textarea>
     </div>
+
     <div class="mb-3">
       <label for="imgUrl" class="form-label">Upload Gambar</label>
       <input type="file" name="imgUrl" id="imgUrl" class="form-control">
@@ -31,6 +32,21 @@
       <p>Gambar saat ini: <img src="/<%= post.imgUrl %>" width="100" /></p>
     <% } %>
     </div>
+
+    <div class="mb-3">
+  <label for="tags" class="form-label">Tags</label>
+  <select class="form-select" name="tags[]" id="tags" multiple>
+    <% tags.forEach(tag => { %>
+      <option 
+        value="<%= tag.id %>" 
+        <%= post.Post_Tags.some(pt => pt.TagId === tag.id) ? "selected" : "" %>>
+        <%= tag.name %>
+      </option>
+    <% }) %>
+  </select>
+</div>
+
+
     <button type="submit" class="btn btn-primary">Posting</button>
   </form>
     </div>

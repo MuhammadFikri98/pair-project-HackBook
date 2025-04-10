@@ -11,17 +11,31 @@ class UserController {
   }
 
   static registerForm(req, res) {
-    res.render("register-form");
+    const { error } = req.query;
+
+    res.render("register-form", { error });
   }
   static postRegister(req, res) {
     // console.log(req.body);
     const { email, password, role } = req.body;
 
+    if (!email || !password || !role) {
+      const error = "All fields are required!";
+      return res.redirect(`/register?error=${error}`);
+    }
+
     User.create({ email, password, role })
       .then((newUser) => {
         res.redirect("/login");
       })
-      .catch((err) => res.send(err));
+      .catch((err) => {
+        if (err.name === "SequelizeValidationError") {
+          const errorMsg = err.errors.map((e) => e.message).join(", ");
+          res.redirect(`/register?error=${errorMsg}`);
+        } else {
+          res.send(err);
+        }
+      });
   }
 
   static postLogin(req, res) {
@@ -85,8 +99,9 @@ class UserController {
   static async getAddPost(req, res) {
     try {
       let { error } = req.query;
+      const tags = await Tag.findAll();
 
-      res.render("addPost", { error });
+      res.render("addPost", { error, tags });
     } catch (error) {
       res.send(error);
     }
@@ -94,18 +109,27 @@ class UserController {
 
   static async addPost(req, res) {
     try {
-      const { title, content } = req.body;
+      const { title, content, tags } = req.body;
       const imgUrl = req.file ? `uploads/${req.file.filename}` : "";
       // Ambil path gambar dari file yang di-upload
       const UserId = req.session.userId;
 
-      await Post.create({
+      const newPost = await Post.create({
         title,
         content,
         imgUrl,
         like: 0,
         UserId,
       });
+
+      if (tags) {
+        const tagIds = Array.isArray(tags) ? tags : [tags]; // support single/multiple
+        const postTags = tagIds.map((tagId) => ({
+          PostId: newPost.id,
+          TagId: +tagId,
+        }));
+        await Post_Tag.bulkCreate(postTags);
+      }
 
       res.redirect("/");
     } catch (error) {
@@ -124,9 +148,13 @@ class UserController {
       // console.log(req.params);
       let { id } = req.params;
 
-      let post = await Post.findByPk(id);
+      let post = await Post.findByPk(id, {
+        include: { model: Post_Tag, include: Tag },
+      });
 
-      res.render("editPost", { post });
+      const tags = await Tag.findAll();
+
+      res.render("editPost", { post, tags });
     } catch (error) {
       res.send(error);
     }
@@ -135,12 +163,35 @@ class UserController {
   static async editPost(req, res) {
     try {
       let { id } = req.params;
-      // console.log(req.body);
+      const { title, content, tags } = req.body;
 
-      const { title, content } = req.body;
-      const imgUrl = req.file ? req.file.path : ""; // Ambil path gambar dari file yang di-upload
+      const post = await Post.findByPk(id);
 
-      await Post.update({ title, content, imgUrl }, { where: { id } });
+      // Cek hak akses
+      if (req.session.role !== "admin" && req.session.userId !== post.UserId) {
+        const error = "You have no access to edit this post";
+        return res.redirect(`/?error=${error}`);
+      }
+
+      let updateData = { title, content };
+      if (req.file) {
+        updateData.imgUrl = `uploads/${req.file.filename}`;
+      }
+
+      await Post.update(updateData, { where: { id } });
+
+      // Hapus relasi lama
+      await Post_Tag.destroy({ where: { PostId: id } });
+
+      // Tambah relasi baru
+      if (tags) {
+        const tagIds = Array.isArray(tags) ? tags : [tags];
+        const postTags = tagIds.map((tagId) => ({
+          PostId: +id,
+          TagId: +tagId,
+        }));
+        await Post_Tag.bulkCreate(postTags);
+      }
 
       res.redirect("/");
     } catch (error) {
@@ -158,6 +209,8 @@ class UserController {
     try {
       const { id } = req.params;
       const post = await Post.findByPk(id);
+
+      await Post_Tag.destroy({ where: { PostId: id } });
 
       await Post.destroy({ where: { id } });
       res.redirect(`/?notif=${post.title}`);
