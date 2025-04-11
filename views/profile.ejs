@@ -46,11 +46,12 @@
         </form>
 
         <hr />
-<h3>Your Post!</h3>
+<h3 style="text-align: center;">Your Post!</h3>
 
 <% if (user.Posts && user.Posts.length > 0) { %>
   <% user.Posts.forEach(post => { %>
-    <div class="card mb-3">
+    <div class="card mb-4 shadow-sm" style="max-width: 600px; margin: 0 auto;">
+
       <div class="card-body">
         <h5 class="card-title"><%= post.title %></h5>
         <p class="card-text"><%= post.content %></p>

@@ -14,7 +14,11 @@
 
   <h2 class="mb-4" style="text-align: center;">Edit Post!</h2>
 
+    <% if (error) { %> <% error = error.split(',') %> <% error.forEach(err =>
+      { %>
 
+      <p style="color: red"><%= err %></p>
+      <% }); %> <% } %>
   <form action="/post/edit/<%= post.id %>" method="POST" enctype="multipart/form-data">
     <div class="mb-3">
       <label for="title" class="form-label">Judul</label>
