@@ -144,7 +144,7 @@ class UserController {
 
   static async getEditPost(req, res) {
     try {
-      // let { error } = req.query;
+      let { error } = req.query;
       // console.log(req.params);
       let { id } = req.params;
 
@@ -154,7 +154,7 @@ class UserController {
 
       const tags = await Tag.findAll();
 
-      res.render("editPost", { post, tags });
+      res.render("editPost", { post, tags, error });
     } catch (error) {
       res.send(error);
     }
@@ -168,10 +168,10 @@ class UserController {
       const post = await Post.findByPk(id);
 
       // Cek hak akses
-      if (req.session.role !== "admin" && req.session.userId !== post.UserId) {
-        const error = "You have no access to edit this post";
-        return res.redirect(`/?error=${error}`);
-      }
+      // if (req.session.role !== "admin" && req.session.userId !== post.UserId) {
+      //   const error = "You have no access to edit this post";
+      //   return res.redirect(`/?error=${error}`);
+      // }
 
       let updateData = { title, content };
       if (req.file) {
@@ -183,7 +183,6 @@ class UserController {
       // Hapus relasi lama
       await Post_Tag.destroy({ where: { PostId: id } });
 
-      // Tambah relasi baru
       if (tags) {
         const tagIds = Array.isArray(tags) ? tags : [tags];
         const postTags = tagIds.map((tagId) => ({
@@ -198,7 +197,7 @@ class UserController {
       let { id } = req.params;
       if (error.name === "SequelizeValidationError") {
         let msg = error.errors.map((el) => el.message);
-        res.redirect(`/post//edit/${id}?error=${msg}`);
+        res.redirect(`/post/edit/${id}?error=${msg}`);
       } else {
         res.send(error);
       }
